@@ -8,18 +8,75 @@
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#6e8efb,#a777e3);margin:0;padding:20px;display:flex;justify-content:center;align-items:center;min-height:100vh;color:#333;}
-    .container {background:white;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);padding:30px;width:90%;max-width:500px;text-align:center;}
-    h1 {color:#4a00e0;margin-bottom:20px;}
-    button {background:#4a00e0;color:white;border:none;padding:12px 25px;font-size:16px;border-radius:50px;cursor:pointer;transition:all 0.3s;margin:10px 0;box-shadow:0 4px 6px rgba(0,0,0,0.1);}
-    button:hover {background:#8e2de2;transform:translateY(-2px);box-shadow:0 6px 8px rgba(0,0,0,0.15);}
-    input {width:80%;padding:12px;margin:15px 0;border:2px solid #ddd;border-radius:50px;font-size:16px;text-align:center;}
-    #walletInfo {margin-top:20px;animation:fadeIn 0.5s ease-in-out;}
-    #statusMessage {margin-top:20px;font-size:14px;color:#666;min-height:20px;}
-    #limits {margin:15px 0;color:#4a00e0;font-weight:600;}
-    .wallet-connect-modal {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;justify-content:center;align-items:center;z-index:1000;}
-    .wallet-connect-box {background:white;padding:30px;border-radius:15px;text-align:center;}
-    @keyframes fadeIn {from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);}}
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+    .container {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+    h1 {
+      color: #4a00e0;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #4a00e0;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 10px 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    button:hover {
+      background: #8e2de2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+    input {
+      width: 80%;
+      padding: 12px;
+      margin: 15px 0;
+      border: 2px solid #ddd;
+      border-radius: 50px;
+      font-size: 16px;
+      text-align: center;
+    }
+    #walletInfo {
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    #statusMessage {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+      min-height: 20px;
+    }
+    #limits {
+      margin: 15px 0;
+      color: #4a00e0;
+      font-weight: 600;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -35,23 +92,14 @@
     <p id="statusMessage"></p>
   </div>
 
-  <div id="walletConnectModal" class="wallet-connect-modal" style="display:none;">
-    <div class="wallet-connect-box">
-      <h2>Connect Your Wallet</h2>
-      <p>Please connect using your wallet's browser</p>
-      <button id="walletConnectBtn">WalletConnect</button>
-    </div>
-  </div>
-
   <script>
+    // Elements
     const connectWalletBtn = document.getElementById("connectWallet");
     const walletInfoDiv = document.getElementById("walletInfo");
     const walletAddressSpan = document.getElementById("walletAddress");
     const buyTokensBtn = document.getElementById("buyTokens");
     const vnsAmountInput = document.getElementById("vnsAmount");
     const statusMessage = document.getElementById("statusMessage");
-    const walletConnectModal = document.getElementById("walletConnectModal");
-    const walletConnectBtn = document.getElementById("walletConnectBtn");
 
     // Contract Details
     const vnsContractAddress = "0xcf3794776075e8bF50Bd5E48Bc1EEf2070b787F8";
@@ -72,26 +120,22 @@
 
     let web3, accounts, vnsContract, usdtContract;
 
-    // Connect Wallet Flow
-    connectWalletBtn.onclick = async () => {
-      if (isInWalletBrowser()) {
-        await connectWallet();
-      } else {
-        walletConnectModal.style.display = "flex";
-      }
-    };
+    // Check if opened from Wix
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromWix = urlParams.get('fromWix');
 
-    walletConnectBtn.onclick = () => {
-      walletConnectModal.style.display = "none";
-      statusMessage.textContent = "Please open this link in your wallet's browser to connect";
-    };
-
-    // Check if user is in a wallet browser
-    function isInWalletBrowser() {
-      return window.ethereum || window.BinanceChain || (window.web3 && window.web3.currentProvider);
+    // Auto-connect if coming from Wix
+    if (fromWix === 'true') {
+      setTimeout(() => {
+        connectWallet();
+      }, 1000);
     }
 
-    // Main wallet connection function
+    // Connect Wallet
+    connectWalletBtn.onclick = async () => {
+      await connectWallet();
+    };
+
     async function connectWallet() {
       if (window.ethereum) {
         try {
@@ -137,11 +181,10 @@
       statusMessage.textContent = "Wallet connected! Enter VNS amount (10-500)";
     }
 
-    // Buy Tokens Function
+    // Buy Tokens
     buyTokensBtn.onclick = async () => {
       const vnsAmount = vnsAmountInput.value;
       
-      // Validate amount
       if (!vnsAmount || isNaN(vnsAmount)) {
         statusMessage.textContent = "Please enter a valid VNS amount";
         return;
@@ -160,19 +203,11 @@
       try {
         statusMessage.textContent = "Processing transaction...";
         
-        // 1. USDT Approval
         const pricePerVNS = await vnsContract.methods.pricePerVNS().call();
         const usdtAmount = vnsAmount * pricePerVNS;
         
-        await usdtContract.methods.approve(
-          vnsContractAddress, 
-          usdtAmount
-        ).send({ from: accounts[0] });
-        
-        // 2. Buy VNS Tokens
-        await vnsContract.methods.buyTokens(vnsAmount).send({ 
-          from: accounts[0] 
-        });
+        await usdtContract.methods.approve(vnsContractAddress, usdtAmount).send({ from: accounts[0] });
+        await vnsContract.methods.buyTokens(vnsAmount).send({ from: accounts[0] });
         
         statusMessage.textContent = `Success! ${vnsAmount} VNS Tokens Purchased`;
       } catch (error) {
