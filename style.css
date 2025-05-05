@@ -1,8 +1,8 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #6e8efb, #a777e3);
     margin: 0;
-    padding: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,11 +18,6 @@ body {
     width: 90%;
     max-width: 500px;
     text-align: center;
-}
-
-h1 {
-    color: #4a00e0;
-    margin-bottom: 20px;
 }
 
 button {
@@ -44,11 +39,6 @@ button:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-button:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-}
-
 input {
     width: 80%;
     padding: 12px;
@@ -57,47 +47,4 @@ input {
     border-radius: 50px;
     font-size: 16px;
     text-align: center;
-    transition: border 0.3s;
-}
-
-input:focus {
-    border-color: #4a00e0;
-    outline: none;
-}
-
-#walletInfo {
-    margin-top: 20px;
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-#walletAddress {
-    font-weight: bold;
-    color: #4a00e0;
-}
-
-#statusMessage {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #666;
-    min-height: 20px;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.loading {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #4a00e0;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
