@@ -1,19 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VNS Token Sale</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1>VNS Token Sale</h1>
-        <button id="connectWallet">Connect Wallet</button>
+        <button id="connectWallet" class="wallet-btn">
+            <span>Connect Wallet</span>
+        </button>
+        
         <div id="walletInfo" style="display:none;">
             <p>Connected: <span id="walletAddress"></span></p>
             <input type="number" id="vnsAmount" placeholder="Enter VNS Amount">
-            <button id="buyTokens">Buy VNS Tokens</button>
+            <button id="buyTokens" class="buy-btn">
+                <span>Buy VNS Tokens</span>
+            </button>
         </div>
+        
         <p id="statusMessage"></p>
     </div>
     <script src="script.js"></script>
