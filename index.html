@@ -1,224 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VNS Token Sale</title>
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #6e8efb, #a777e3);
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      color: #333;
-    }
-    .container {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      padding: 30px;
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-    }
-    h1 {
-      color: #4a00e0;
-      margin-bottom: 20px;
-    }
-    button {
-      background: #4a00e0;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      font-size: 16px;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin: 10px 0;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    button:hover {
-      background: #8e2de2;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-    }
-    input {
-      width: 80%;
-      padding: 12px;
-      margin: 15px 0;
-      border: 2px solid #ddd;
-      border-radius: 50px;
-      font-size: 16px;
-      text-align: center;
-    }
-    #walletInfo {
-      margin-top: 20px;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-    #statusMessage {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #666;
-      min-height: 20px;
-    }
-    #limits {
-      margin: 15px 0;
-      color: #4a00e0;
-      font-weight: 600;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VNS Token Presale</title>
+    <!-- Yahan apne CSS ya style bhi add kar sakte hain agar chahen -->
 </head>
 <body>
-  <div class="container">
-    <h1>VNS Token Sale</h1>
-    <button id="connectWallet">Buy VNS Tokens</button>
-    <div id="walletInfo" style="display:none;">
-      <p>Connected: <span id="walletAddress"></span></p>
-      <div id="limits">Minimum: 10 VNS | Maximum: 500 VNS</div>
-      <input type="number" id="vnsAmount" placeholder="Enter VNS Amount (10-500)" min="10" max="500">
-      <button id="buyTokens">Confirm Purchase</button>
+    <div id="walletInfoDiv" style="display:none;">
+        <p>Your wallet address: <span id="walletAddress"></span></p>
     </div>
+
+    <div>
+        <label for="vnsAmountInput">Enter VNS Amount (10 - 500 VNS):</label>
+        <input type="number" id="vnsAmountInput" min="10" max="500">
+    </div>
+
+    <div>
+        <button id="connectWalletBtn">Connect Wallet</button>
+        <button id="buyTokensBtn">Buy Tokens</button>
+    </div>
+
     <p id="statusMessage"></p>
-  </div>
 
-  <script>
-    // Elements
-    const connectWalletBtn = document.getElementById("connectWallet");
-    const walletInfoDiv = document.getElementById("walletInfo");
-    const walletAddressSpan = document.getElementById("walletAddress");
-    const buyTokensBtn = document.getElementById("buyTokens");
-    const vnsAmountInput = document.getElementById("vnsAmount");
-    const statusMessage = document.getElementById("statusMessage");
-
-    // Contract Details
-    const vnsContractAddress = "0xcf3794776075e8bF50Bd5E48Bc1EEf2070b787F8";
-    const vnsContractABI = [{"inputs":[{"internalType":"address","name":"_vnsToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_sellerWallet","type":"address"},{"internalType":"address","name":"_paymentReceiver","type":"address"},{"internalType":"uint256","name":"_pricePerVNS","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newPrice","type":"uint256"}],"name":"PriceUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"vnsAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"usdtAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"CHANGE_DELAY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_PURCHASE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_PURCHASE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"vnsAmount","type":"uint256"}],"name":"buyTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdrawAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"isPaused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"lastPriceChange","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paymentReceiver","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pricePerVNS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"tokenAddress","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"recoverERC20","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"sellerWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"newPrice","type":"uint256"}],"name":"setPrice","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vnsToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}];
-
-    // USDT Contract (BSC)
-    const usdtAddress = "0x55d398326f99059fF775485246999027B3197955";
-    const usdtABI = [{
-      "constant": false,
-      "inputs": [
-        {"name":"_spender","type":"address"},
-        {"name":"_value","type":"uint256"}
-      ],
-      "name":"approve",
-      "outputs": [{"name":"","type":"bool"}],
-      "type":"function"
-    }];
-
-    let web3, accounts, vnsContract, usdtContract;
-
-    // Check if opened from Wix
-    const urlParams = new URLSearchParams(window.location.search);
-    const fromWix = urlParams.get('fromWix');
-
-    // Auto-connect if coming from Wix
-    if (fromWix === 'true') {
-      setTimeout(() => {
-        connectWallet();
-      }, 1000);
-    }
-
-    // Connect Wallet
-    connectWalletBtn.onclick = async () => {
-      await connectWallet();
-    };
-
-    async function connectWallet() {
-      if (window.ethereum) {
-        try {
-          web3 = new Web3(window.ethereum);
-          accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-          initContracts();
-          showPurchaseUI();
-        } catch (error) {
-          handleError(error);
-        }
-      } else if (window.BinanceChain) {
-        try {
-          web3 = new Web3(window.BinanceChain);
-          accounts = await window.BinanceChain.request({ method: "eth_requestAccounts" });
-          initContracts();
-          showPurchaseUI();
-        } catch (error) {
-          handleError(error);
-        }
-      } else if (window.web3) {
-        try {
-          web3 = new Web3(window.web3.currentProvider);
-          accounts = await web3.eth.getAccounts();
-          initContracts();
-          showPurchaseUI();
-        } catch (error) {
-          handleError(error);
-        }
-      } else {
-        statusMessage.textContent = "Please use a Web3 compatible wallet browser";
-      }
-    }
-
-    function initContracts() {
-      vnsContract = new web3.eth.Contract(vnsContractABI, vnsContractAddress);
-      usdtContract = new web3.eth.Contract(usdtABI, usdtAddress);
-    }
-
-    function showPurchaseUI() {
-      walletAddressSpan.textContent = `${accounts[0].substring(0, 6)}...${accounts[0].substring(38)}`;
-      walletInfoDiv.style.display = "block";
-      connectWalletBtn.style.display = "none";
-      statusMessage.textContent = "Wallet connected! Enter VNS amount (10-500)";
-    }
-
-    // Buy Tokens
-    buyTokensBtn.onclick = async () => {
-      const vnsAmount = vnsAmountInput.value;
-      
-      if (!vnsAmount || isNaN(vnsAmount)) {
-        statusMessage.textContent = "Please enter a valid VNS amount";
-        return;
-      }
-      
-      if (vnsAmount < 10) {
-        statusMessage.textContent = "Minimum purchase is 10 VNS";
-        return;
-      }
-      
-      if (vnsAmount > 500) {
-        statusMessage.textContent = "Maximum purchase is 500 VNS";
-        return;
-      }
-
-      try {
-        statusMessage.textContent = "Processing transaction...";
-        
-        const pricePerVNS = await vnsContract.methods.pricePerVNS().call();
-        const usdtAmount = vnsAmount * pricePerVNS;
-        
-        await usdtContract.methods.approve(vnsContractAddress, usdtAmount).send({ from: accounts[0] });
-        await vnsContract.methods.buyTokens(vnsAmount).send({ from: accounts[0] });
-        
-        statusMessage.textContent = `Success! ${vnsAmount} VNS Tokens Purchased`;
-      } catch (error) {
-        handleError(error);
-      }
-    };
-
-    function handleError(error) {
-      console.error(error);
-      statusMessage.textContent = "Error: " + (error.message || error);
-    }
-  </script>
+    <!-- Web3.js Library ko include karein -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+    <!-- Apni custom script.js file ko link karein -->
+    <script src="script.js"></script>
 </body>
 </html>
