@@ -1,77 +1,128 @@
 body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
   margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(to right, #0f0f0f, #1a1a1a);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-.container {
-  text-align: center;
   padding: 20px;
-  background: #111;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-}
-
-h1 {
-  color: #FFD700;
-  margin-bottom: 10px;
-}
-
-.input-group input {
-  width: 80%;
-  padding: 10px;
-  margin: 10px auto;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  text-align: center;
-}
-
-.btn {
-  width: 85%;
-  padding: 12px;
-  margin: 10px auto;
-  font-size: 18px;
-  border: none;
-  border-radius: 10px;
-  background-color: #FFD700;
-  color: #111;
-  font-weight: bold;
-  cursor: pointer;
-  display: block;
-}
-
-.btn:hover {
-  background-color: #e6c200;
-}
-
-.address-box {
-  margin-top: 15px;
   display: flex;
   justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.address-box input {
-  width: 65%;
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 14px;
-  border: none;
-  background: #222;
+  align-items: center;
+  min-height: 100vh;
   color: #fff;
 }
 
-.message {
-  margin-top: 15px;
-  font-weight: bold;
+.container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+h1 {
+  color: #4cc9f0;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.big-button {
+  background: #4361ee;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin: 15px 0;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+}
+
+.big-button:hover {
+  background: #3a0ca3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+}
+
+input {
+  width: 80%;
+  padding: 15px;
+  margin: 20px 0;
+  border: 2px solid #4361ee;
+  border-radius: 50px;
+  font-size: 16px;
+  text-align: center;
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.contract-info {
+  background: rgba(0,0,0,0.3);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contract-info button {
+  background: #f72585;
+  padding: 8px 15px;
+  font-size: 14px;
+}
+
+.wallet-info {
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+}
+
+.limits {
+  margin: 20px 0;
+  color: #4cc9f0;
+  font-weight: 600;
+}
+
+.info-text {
+  margin-top: 10px;
+  color: #a5b4fc;
+}
+
+#statusMessage {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.success {
+  background: rgba(46, 213, 115, 0.2);
+  color: #2ed573;
+}
+
+.error {
+  background: rgba(255, 71, 87, 0.2);
+  color: #ff4757;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  .big-button {
+    padding: 12px 25px;
+    font-size: 16px;
+  }
 }
