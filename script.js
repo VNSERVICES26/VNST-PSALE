@@ -31,18 +31,25 @@ document.getElementById("connectWallet").addEventListener("click", async () => {
 });
 
 document.getElementById("buyVNS").addEventListener("click", async () => {
-  const vnsAmount = document.getElementById("vnsAmount").value;
-  if (!vnsAmount || vnsAmount <= 0) {
-    alert("Please enter a valid VNS amount.");
+  const vnsAmountInput = document.getElementById("vnsAmount").value;
+  const vnsAmount = Number(vnsAmountInput);
+
+  const min = 10;
+  const max = 500;
+
+  if (!vnsAmount || vnsAmount < min || vnsAmount > max) {
+    alert(`Please enter a valid amount between ${min} and ${max} VNS.`);
     return;
   }
 
   try {
-    // Calculate USDT amount based on pricePerVNS
     const pricePerVNS = await presaleContract.methods.pricePerVNS().call();
-    const usdtAmount = (vnsAmount * pricePerVNS) / 1e6; 
 
-    // Approve USDT transfer
+    const usdtDecimals = 6;
+    const vnsDecimals = 8;
+
+    const usdtAmount = BigInt(vnsAmount) * BigInt(pricePerVNS) * BigInt(10 ** usdtDecimals) / (BigInt(10 ** vnsDecimals) * BigInt(1e6));
+
     const usdtContract = new web3.eth.Contract([
       {
         "constant": false,
@@ -56,15 +63,16 @@ document.getElementById("buyVNS").addEventListener("click", async () => {
       }
     ], usdtTokenAddress);
 
-    await usdtContract.methods.approve(presaleAddress, usdtAmount).send({ from: account });
+    document.getElementById("status").innerText = "Approving USDT...";
+    await usdtContract.methods.approve(presaleAddress, usdtAmount.toString()).send({ from: account });
 
-    // Buy VNS tokens
-    await presaleContract.methods.buyTokens(vnsAmount).send({ from: account });
+    document.getElementById("status").innerText = "Buying VNS tokens...";
+    await presaleContract.methods.buyTokens(vnsAmount * 10 ** vnsDecimals).send({ from: account });
 
     document.getElementById("status").innerText = "Purchase successful!";
   } catch (error) {
     console.error(error);
-    document.getElementById("status").innerText = "Purchase failed.";
+    document.getElementById("status").innerText = "Purchase failed. Check console.";
   }
 });
 
