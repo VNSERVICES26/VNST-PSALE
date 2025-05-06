@@ -1,105 +1,57 @@
+// script.js
+
+const vnsSaleAddress = "0xcf3794776075e8bF50Bd5E48Bc1EEf2070b787F8";
+const vnsTokenAddress = "0x151CC30953207379a6124F96B995E27ed4B56aF9";
+const usdtAddress = "0x55d398326f99059fF775485246999027B3197955";
+
+const vnsAbi = [
+  {"inputs":[{"internalType":"uint256","name":"vnsAmount","type":"uint256"}],"name":"buyTokens","outputs":[],"stateMutability":"nonpayable","type":"function"}
+];
+
 let web3;
-let userAccount;
-
-const contractAddress = "0xcf3794776075e8bF50Bd5E48Bc1EEf2070b787F8";  
-const vnsTokenAddress = "0x151CC30953207379a6124F96B995E27ed4B56aF9"; 
-const usdtTokenAddress = "0x55d398326f99059fF775485246999027B3197955"; 
-
-const contractABI = [ 
-    {"inputs":[{"internalType":"address","name":"_vnsToken","type":"address"},{"internalType":"address","name":"_usdtToken","type":"address"},{"internalType":"address","name":"_sellerWallet","type":"address"},{"internalType":"address","name":"_paymentReceiver","type":"address"},{"internalType":"uint256","name":"_pricePerVNS","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},
-    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},
-    {"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newPrice","type":"uint256"}],"name":"PriceUpdated","type":"event"},
-    {"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"vnsAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"usdtAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},
-    {"inputs":[],"name":"CHANGE_DELAY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"MAX_PURCHASE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"MIN_PURCHASE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-    {"inputs":[{"internalType":"uint256","name":"vnsAmount","type":"uint256"}],"name":"buyTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[],"name":"emergencyWithdrawAll","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[],"name":"isPaused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"lastPriceChange","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[],"name":"paymentReceiver","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"pricePerVNS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-    {"inputs":[{"internalType":"address","name":"tokenAddress","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"recoverERC20","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[],"name":"sellerWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-    {"inputs":[{"internalType":"uint256","name":"newPrice","type":"uint256"}],"name":"setPrice","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[],"name":"usdtToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"vnsToken","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}
-  ];
-
-let contract, usdtContract;
+let account;
 
 async function connectWallet() {
-    if (window.ethereum) {
-        try {
-            await ethereum.request({ method: "eth_requestAccounts" });
-            web3 = new Web3(window.ethereum);
-            const accounts = await web3.eth.getAccounts();
-            userAccount = accounts[0];
-            walletAddress.textContent = userAccount;
-            walletInfoDiv.style.display = "block";
-
-            contract = new web3.eth.Contract(contractABI, contractAddress);
-            usdtContract = new web3.eth.Contract([
-                {
-                    constant: true,
-                    inputs: [{ name: "_owner", type: "address" }, { name: "_spender", type: "address" }],
-                    name: "allowance",
-                    outputs: [{ name: "", type: "uint256" }],
-                    type: "function",
-                },
-                {
-                    constant: false,
-                    inputs: [{ name: "_spender", type: "address" }, { name: "_value", type: "uint256" }],
-                    name: "approve",
-                    outputs: [{ name: "", type: "bool" }],
-                    type: "function",
-                }
-            ], usdtTokenAddress);
-
-            statusMessage.textContent = "Wallet connected successfully.";
-        } catch (error) {
-            statusMessage.textContent = "Wallet connection failed.";
-            console.error(error);
-        }
-    } else {
-        alert("Please install MetaMask!");
-    }
-}
-
-async function buyTokens() {
-    const amount = parseFloat(vnsAmountInput.value);
-    if (isNaN(amount) || amount < 10 || amount > 500) {
-        statusMessage.textContent = "Please enter amount between 10 and 500 VNS.";
-        return;
-    }
-
+  if (window.ethereum) {
+    web3 = new Web3(window.ethereum);
     try {
-        const vnsAmount = web3.utils.toWei(amount.toString(), "ether");
-        const price = await contract.methods.pricePerVNS().call();
-        const usdtDecimals = 18;
-        const vnsDecimals = 18;
-
-        const usdtAmount = (BigInt(vnsAmount) * BigInt(price) * BigInt(10 ** usdtDecimals)) / (BigInt(10 ** vnsDecimals) * BigInt(10 ** 6));
-
-        const allowance = await usdtContract.methods.allowance(userAccount, contractAddress).call();
-        if (BigInt(allowance) < usdtAmount) {
-            statusMessage.textContent = "Approving USDT...";
-            await usdtContract.methods.approve(contractAddress, usdtAmount.toString()).send({ from: userAccount });
-        }
-
-        statusMessage.textContent = "Purchasing VNS Tokens...";
-        await contract.methods.buyTokens(vnsAmount).send({ from: userAccount });
-
-        statusMessage.textContent = "Purchase successful!";
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      account = accounts[0];
+      document.getElementById("message").innerText = `✅ Connected: ${account}`;
     } catch (error) {
-        console.error(error);
-        statusMessage.textContent = "Transaction failed: " + error.message;
+      document.getElementById("message").innerText = "❌ Connection failed.";
     }
+  } else {
+    document.getElementById("message").innerText = "⚠️ Please use a Web3 enabled wallet browser.";
+  }
 }
 
-connectWalletBtn.onclick = connectWallet;
-buyTokensBtn.onclick = buyTokens;
+async function buyVNS() {
+  const amount = parseFloat(document.getElementById("vnsAmount").value);
+
+  if (!account) {
+    return document.getElementById("message").innerText = "❌ Connect your wallet first.";
+  }
+
+  if (isNaN(amount) || amount < 10 || amount > 500) {
+    return document.getElementById("message").innerText = "⚠️ Enter amount between 10 and 500 VNS.";
+  }
+
+  const contract = new web3.eth.Contract(vnsAbi, vnsSaleAddress);
+  const decimals = web3.utils.toWei(amount.toString(), 'ether');
+
+  try {
+    await contract.methods.buyTokens(decimals).send({ from: account });
+    document.getElementById("message").innerText = `✅ Success! You bought ${amount} VNS.`;
+  } catch (err) {
+    document.getElementById("message").innerText = `❌ Transaction failed: ${err.message}`;
+  }
+}
+
+function copyAddress() {
+  const copyText = document.getElementById("contractAddress");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(copyText.value);
+  document.getElementById("message").innerText = "✅ Address copied!";
+}
