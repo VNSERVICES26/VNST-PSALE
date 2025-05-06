@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VNS Token Presale</title>
-    <!-- Yahan apne CSS ya style bhi add kar sakte hain agar chahen -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buy VNS Token</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
-    <div id="walletInfoDiv" style="display:none;">
-        <p>Your wallet address: <span id="walletAddress"></span></p>
-    </div>
+  <div class="container">
+    <h1>🚀 Buy VNS Token</h1>
 
-    <div>
-        <label for="vnsAmountInput">Enter VNS Amount (10 - 500 VNS):</label>
-        <input type="number" id="vnsAmountInput" min="10" max="500">
-    </div>
+    <button id="connectWallet">🔗 Connect Wallet</button>
+    <p id="walletAddress">Wallet not connected</p>
 
-    <div>
-        <button id="connectWalletBtn">Connect Wallet</button>
-        <button id="buyTokensBtn">Buy Tokens</button>
-    </div>
+    <input type="number" id="vnsAmount" placeholder="Enter VNS Amount (Min 10, Max 500)">
+    <button id="buyButton">🛒 Buy VNS</button>
 
-    <p id="statusMessage"></p>
+    <p class="note">Min: 10 VNS | Max: 500 VNS</p>
+    <p id="status"></p>
+  </div>
 
-    <!-- Web3.js Library ko include karein -->
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
-    <!-- Apni custom script.js file ko link karein -->
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
