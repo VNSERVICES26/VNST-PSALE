@@ -16,15 +16,17 @@
       <input type="number" id="vnsAmount" placeholder="Enter VNS Amount (10 - 500)" min="10" max="500" />
     </div>
 
-    <button id="connectWallet" class="btn connect">🔗 Connect Wallet</button>
-    <button id="buyVNS" class="btn buy">🪙 Buy VNS</button>
+    <!-- ✅ Added onclick to buttons -->
+    <button onclick="connectWallet()" class="btn connect">🔗 Connect Wallet</button>
+    <button onclick="buyVNS()" class="btn buy">🪙 Buy VNS</button>
 
     <div class="address-box">
       <input id="contractAddress" value="0x151CC30953207379a6124F96B995E27ed4B56aF9" readonly />
-      <button id="copyAddress" class="btn copy">📋 Copy Address</button>
+      <button onclick="copyAddress()" class="btn copy">📋 Copy Address</button>
     </div>
 
-    <p id="status" class="message"></p>
+    <!-- ✅ Changed id="status" to id="message" -->
+    <p id="message" class="message"></p>
   </div>
 
   <script src="script.js"></script>
