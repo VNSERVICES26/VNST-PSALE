@@ -2,29 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Buy VNS Token</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>🚀 Buy VNS Token</h1>
-    <p>Minimum: 10 VNS | Maximum: 500 VNS per transaction</p>
+    <h1>Buy VNS Token</h1>
+    <button id="connectWallet">Connect Wallet</button>
 
-    <div class="input-group">
-      <input type="number" id="vnsAmount" placeholder="Enter VNS Amount (10 - 500)" min="10" max="500" />
+    <div class="input-box">
+      <label for="vnsAmount">Enter VNS Amount:</label>
+      <input type="number" id="vnsAmount" placeholder="e.g. 100" />
     </div>
 
-    <button onclick="connectWallet()" class="btn connect">🔗 Connect Wallet</button>
-    <button onclick="buyVNS()" class="btn buy">🪙 Buy VNS</button>
+    <button id="buyVNS">Buy VNS</button>
 
-    <div class="address-box">
-      <input id="contractAddress" value="0xcf3794776075e8bF50Bd5E48Bc1EEf2070b787F8" readonly />
-      <button onclick="copyAddress()" class="btn copy">📋 Copy Address</button>
+    <div class="copy-box">
+      <p><strong>VNS Token Address:</strong> <span id="tokenAddress">0x151CC30953207379a6124F96B995E27ed4B56aF9</span></p>
+      <button id="copyAddress">Copy Address</button>
     </div>
 
-    <p id="message" class="message"></p>
+    <p id="status"></p>
   </div>
 
   <script src="script.js"></script>
