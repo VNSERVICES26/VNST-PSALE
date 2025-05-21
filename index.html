@@ -3,32 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Buy VNS Token</title>
+  <title>VNST Swap</title>
   <link rel="stylesheet" href="style.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>🚀 Buy VNS Token</h1>
-    <p>Minimum: 10 VNS | Maximum: 500 VNS per transaction</p>
+    <h1>Buy VNST with USDT</h1>
+    <button id="connectWalletBtn">Connect Wallet</button>
 
-    <div class="input-group">
-      <input type="number" id="vnsAmount" placeholder="Enter VNS Amount (10 - 500)" min="10" max="500" />
+    <div id="walletInfo" style="display:none;">
+      <p>Wallet: <span id="walletAddress"></span></p>
     </div>
 
-    <!-- ✅ Added onclick to buttons -->
-    <button onclick="connectWallet()" class="btn connect">🔗 Connect Wallet</button>
-    <button onclick="buyVNS()" class="btn buy">🪙 Buy VNS</button>
+    <div class="form">
+      <label for="usdtAmount">USDT Amount:</label>
+      <input type="number" id="usdtAmount" placeholder="Enter USDT to spend"/>
 
-    <div class="address-box">
-      <input id="contractAddress" value="0x151CC30953207379a6124F96B995E27ed4B56aF9" readonly />
-      <button onclick="copyAddress()" class="btn copy">📋 Copy Address</button>
+      <button id="approveBtn">Approve USDT</button>
+      <button id="buyBtn">Buy VNST</button>
+
+      <p id="status"></p>
     </div>
-
-    <!-- ✅ Changed id="status" to id="message" -->
-    <p id="message" class="message"></p>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+  <script src="https://unpkg.com/web3modal"></script>
   <script src="script.js"></script>
 </body>
 </html>
