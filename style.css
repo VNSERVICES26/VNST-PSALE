@@ -1,66 +1,86 @@
 body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #000000;
-    color: #FFD700;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px;
-}
-
-h1 {
-    color: #FFD700;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0c0c0c;
+  color: #ffd700;
 }
 
 .container {
-    background-color: #111111;
-    border: 1px solid #FFD700;
-    border-radius: 10px;
-    padding: 20px;
-    max-width: 400px;
-    width: 100%;
-    box-shadow: 0 0 10px #FFD700;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
-input {
-    padding: 10px;
-    width: 100%;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: 1px solid #FFD700;
-    background-color: #000;
-    color: #FFD700;
+h1 {
+  font-size: 2rem;
+  color: #ffd700;
+  margin-bottom: 1.5rem;
+}
+
+.token-info,
+.input-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ffd700;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ffd700;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  color: #fff;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
 button {
-    padding: 10px;
-    width: 100%;
-    background-color: #FFD700;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 10px;
-    transition: 0.3s;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffd700;
+  color: #0c0c0c;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #ffcc00;
+  background-color: #e5c100;
 }
 
-.status {
-    margin-top: 10px;
-    font-size: 14px;
-    text-align: center;
+#status,
+#usdtQuote,
+#wallet-address {
+  margin-top: 1rem;
+  color: #fff;
+  font-size: 1rem;
+  word-wrap: break-word;
 }
 
-.token-address {
-    word-wrap: break-word;
-    background: #222;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    margin-top: 10px;
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  input,
+  button {
+    font-size: 1rem;
+    width: 100%;
+  }
 }
