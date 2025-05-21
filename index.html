@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>VNST Swap</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy VNST Token</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Buy VNST with USDT</h1>
-    <button id="connectWalletBtn">Connect Wallet</button>
+    <h1>Buy VNST Token</h1>
 
-    <div id="walletInfo" style="display:none;">
-      <p>Wallet: <span id="walletAddress"></span></p>
+    <div class="token-info">
+      <label>VNST Token Address:</label>
+      <input type="text" id="tokenAddress" readonly>
+      <button onclick="copyAddress()">Copy</button>
     </div>
 
-    <div class="form">
-      <label for="usdtAmount">USDT Amount:</label>
-      <input type="number" id="usdtAmount" placeholder="Enter USDT to spend"/>
-
-      <button id="approveBtn">Approve USDT</button>
-      <button id="buyBtn">Buy VNST</button>
-
-      <p id="status"></p>
+    <div class="input-group">
+      <label>VNST Amount:</label>
+      <input type="number" id="vnstAmount" placeholder="Enter VNST amount" />
+      <button onclick="getQuote()">Get USDT Required</button>
     </div>
+
+    <p id="usdtQuote">USDT Required: -</p>
+
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <button onclick="approveUSDT()">Approve USDT</button>
+    <button onclick="buyVNST()">Buy VNST</button>
+
+    <p id="status"></p>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="https://unpkg.com/web3modal"></script>
-  <script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+<script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
+<script src="https://unpkg.com/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
