@@ -1,4 +1,3 @@
-// Ensure ethers is available (you must include the proper ethers script in your HTML)
 let provider;
 let signer;
 let userAddress;
